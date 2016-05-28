@@ -1,0 +1,104 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Names Service",
+        "description": "A simple REST service in Godot",
+        "version": "0.0.1"
+    },
+    "host": "localhost:3560",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/user": {
+            "post": {
+                "summary": "Add User.",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "query",
+                        "description": "User name.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created."
+                    },
+                    "404": {
+                        "description": "Invalid parameters."
+                    }
+                }
+            }
+        },
+        "/user/{user}": {
+            "get": {
+                "summary": "Add User.",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "Add user.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created."
+                    },
+                    "404": {
+                        "description": "Invalid parameters."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Add User.",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "Add user.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created."
+                    },
+                    "404": {
+                        "description": "Invalid parameters."
+                    }
+                }
+            }
+        },
+        "/echo": {
+            "get": {
+                "summary": "get echo.",
+                "parameters": [
+                    {
+                        "name": "echo",
+                        "in": "query",
+                        "description": "echo.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "echo."
+                    },
+                    "404": {
+                        "description": "Invalid parameters."
+                    }
+                }
+            }
+        }
+    }
+}
