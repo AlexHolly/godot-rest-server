@@ -84,3 +84,9 @@ func get_echo(header_dict, body, params_dict, connection):
 		response["body"] = "parameter user not found"
 	
 	return response
+
+func _on_REST_onConnect( connection ):
+	print("Someone Connected :)")
+
+func _on_REST_onDisconnect( connection, ip ):
+	print("Someone Disonnected :(")

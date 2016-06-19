@@ -77,8 +77,7 @@ func run_bg_request(verbindung):
 				return close_connection(431,"BYE" , connection, thread)
 			
 			var header_map = _parse_header(header)
-			
-			#check is response
+
 			if(header_map!=-2):
 
 				if(header_map==-1):
@@ -105,7 +104,8 @@ func run_bg_request(verbindung):
 						return close_connection(431,"BYE" , connection, thread)
 				#else:
 				#	return close_connection(431,"BYE" , connection, thread_id)
-			
+			else:
+				print("Invalid header")
 func end(thread, connection):
 	emit_signal("onDisconnect", connection, connection.get_connected_host())
 	call_deferred( "close_thread", thread.get_id() )
