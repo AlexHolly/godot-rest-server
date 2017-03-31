@@ -2,8 +2,6 @@
 #version 0.1
 extends Node
 
-var port = 3560
-
 var max_headers = 100
 var max_header_size = 8190*max_headers
 
@@ -74,19 +72,14 @@ func register_services():
 			for fun in service.get_method_list():
 				
 				if(fun["flags"] & METHOD_FLAG_FROM_SCRIPT):
-					
-					var name = fun["name"]
-					if ( name.match("post_*") ||
-					name.match("get_*") || name.match("put_*") ||
-					name.match("delete_*") || name.match("patch_*") ||
-					name.match("option_*") || name.match("head_*") ):
-						
+					name = fun["name"]
+					if( name.matchn("post_*") || name.matchn("get_*") || name.matchn("put_*") || name.matchn("delete_*") || name.matchn("patch_*") || name.matchn("option_*") || name.matchn("head_*") ):
 						var verb_d = name.split("_")
 						var verb = verb_d[0].to_upper()
-						
+							
 						var url_d = name.right(verb.length())
 						var url = url_d.replace("_","/")
-	
+		
 						add_service(verb, url, [service, name])
 		else:
 			print("Name has no Service at the end")
@@ -201,7 +194,7 @@ func _parse_header(request):
 	
 	if(requestLine["verb"]=="HTTP/1.1"):
 		return -2
-	
+		
 	requestLine["url"] = line_split[1]
 	
 	requestLine["version"] = line_split[2]
@@ -250,21 +243,28 @@ func _parse_body(header, connection):
 	
 	if ("content-length" in header && "content-type" in header):
 		var content_length = header["content-length"].to_int()
-		
 		if (content_length != 0 ):
 			var content_type = header["content-type"].to_lower()
-			
+
 			#ISSUE can't compare RawArray with -1 == not working
 			#if(accepted_content_types.find(content_type)==-1):
 			#	return -1
 				
 			if(content_type == "application/json"):
-				body.parse_json(connection.get_data(content_length)[1].get_string_from_utf8())
+				body = parse_json(connection.get_data(content_length)[1].get_string_from_utf8())
+				if(typeof(body)!=TYPE_DICTIONARY):
+					print("Error: invalid json")
 			elif(content_type == "bytestream"):
 				body = connection.get_data(content_length)[1]
 			elif(content_type == "text/plain" || content_type == "text/html"):
 				body = connection.get_data(content_length)[1].get_string_from_utf8()
-
+			else:
+				print("Error: unsupported content-type")
+		else:
+			print("Error: invalid content-length")
+	else:
+		print("Error: missing content-type or content-length")
+		
 	return body
 
 func response(code, header_adds, body, connection):
@@ -281,8 +281,8 @@ func response(code, header_adds, body, connection):
 	
 var default_body_parser = ["default_body_parser",self]
 
-func default_body_parser(body,has_type):
-	var raw_body = RawArray()
+func default_body_parser(body, has_type):
+	var raw_body = PoolByteArray()
 	var header = {}
 	if(typeof(body) == TYPE_RAW_ARRAY):
 		raw_body = body

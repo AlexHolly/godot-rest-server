@@ -2,6 +2,8 @@
 #version 0.1
 extends "res://rest/rest.gd"
 
+var port = 3560
+
 signal onConnect( connection )
 signal onDisconnect( connection, ip )
 
@@ -10,6 +12,7 @@ var thread_store = {}
 var header_error = false
 
 func _ready():
+	PUBLIC_PATH = "res://public"
 	start_server(port)
 
 func start_server(port):
