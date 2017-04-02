@@ -2,6 +2,8 @@
 #v0.4
 extends Node
 
+	
+var http = HTTPClient.new() # Create the Client
 var timeout_sec = 1
 
 var ERR_ADRESS = "Invalid http request, maybe adress is empty?"
@@ -37,7 +39,8 @@ var HTTPS = "https://"
 # TODO Asynchrone anfragen einbauen? Etwas komplizierter für anfragenden, muss call back funktion mit geben?
 # TODO ssl immer port 443???? nicht unbedingt oder?
 
-func req(verb,adress,body1):
+func req(verb, adress, body1):	
+		
 	if(adress==""):
 		return error(ERR_ADRESS)
 		
@@ -50,11 +53,11 @@ func req(verb,adress,body1):
 	
 	var http_fullhost = checkServerConnection(adress)
 	var http = http_fullhost[0]
-	var fullhost = http_fullhost[1]
-	
-	if(typeof(http)==TYPE_OBJECT):
+	if(http.get_status()==HTTPClient.STATUS_CONNECTED):
+		var fullhost = http_fullhost[1]
 		var url = http_fullhost[2]
 		var err = http.request_raw(verb, url, dict_to_array(headers), body)
+		
 		if(!err):
 			return getResponse(http)
 		else:
@@ -120,7 +123,9 @@ func get_link_address_port_path(uri):
 	var port = "80"
 	if(host_port.size()>1):
 		port = host_port[1]
-	
+	if(uri.begins_with(HTTPS)):
+		port = "443"
+		
 	var path = uri.replace(left,"")
 	
 	return {
@@ -144,8 +149,6 @@ func checkServerConnection(adress):
 	var fullhost = uri_dict["fullhost"]
 
 	var ssl = uri_dict["ssl"]
-	
-	var http = HTTPClient.new() # Create the Client
 	
 	http.set_blocking_mode( true ) #wait untl all data is available on response
 

@@ -26,6 +26,8 @@ func _ready():
 
 
 func connect_to_server(ip, port):
+	self.ip = ip
+	self.port = port
 	connection = StreamPeerTCP.new()
 	connection.connect_to_host( ip, port )
 	print( "Connected to " + ip + ":" + str(port) )
@@ -79,9 +81,9 @@ func _process(delta):
 		
 		print( "Trying to connect " + ip + ":" + str(port) )
 	
-	elif connection.get_status() == connection.STATUS_NONE or connection.get_status() == StreamPeerTCP.STATUS_ERROR:
-		
-		print( "Couldn't connect to " + ip + " :" + str(port) )
+	elif (connection.get_status() == connection.STATUS_NONE) or (connection.get_status() == StreamPeerTCP.STATUS_ERROR):
+
+		print( "Can't connect to " + ip + " :" + str(port) )
 		print( "Server disconnected? " )
 		emit_signal("onDisconnect", connection)
 		set_process( false )

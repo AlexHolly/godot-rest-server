@@ -157,6 +157,9 @@ func get_link_address_port_path(uri):
 	var port = "80"
 	if(host_port.size()>1):
 		port = host_port[1]
+
+	if(uri.begins_with(HTTPS)):
+		port = "443"
 	
 	var path = uri.replace(left,"")
 	
