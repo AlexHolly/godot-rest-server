@@ -13,11 +13,11 @@ func response():
 func header():
 	var rs = {}
 	
-	#We need them to make swagger requests work
+	# Needed to make swagger requests work
 	rs["Access-Control-Allow-Origin"] = "*"
 	rs["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept"
 
-	#We need this to make Postman work
+	# Needed to make Postman work
 	rs["content-length"] = str(0)
 	
 	return rs

@@ -2,7 +2,7 @@
 #version 0.1
 extends "res://rest/rest.gd"
 
-var port = 3560
+var default_port = 3560
 
 signal onConnect( connection )
 signal onDisconnect( connection, ip )
@@ -13,7 +13,7 @@ var header_error = false
 
 func _ready():
 	PUBLIC_PATH = "res://public"
-	start_server(port)
+	start_server(default_port)
 
 func start_server(port):
 	server = TCP_Server.new()
@@ -54,22 +54,22 @@ func run_bg_request(verbindung):
 		
 		while(keep_alive):
 			
-			#check someone disconnected
-			if(connection != null && !connection.is_connected()):
+			# check someone disconnected
+			if(connection != null && !connection.is_connected_to_host()):
 				return end(thread, connection)
 				
-			#read header string
+			# read header string
 			
 			var header = ""
 			var header_size = 0
 			
 			while(!header_error && header.substr(header.length()-4, header.length()) != "\r\n\r\n"):
 				
-				#check someone disconnected
-				if(connection != null && !connection.is_connected()):
+				# check someone disconnected
+				if(connection != null && !connection.is_connected_to_host()):
 					return end(thread, connection)
 				
-				#Waiting until data incoming
+				# Waiting until data incoming
 				header += connection.get_data(1)[1].get_string_from_utf8()
 
 				header_size += 1
@@ -81,34 +81,36 @@ func run_bg_request(verbindung):
 			
 			var header_map = _parse_header(header)
 
-			if(header_map!=-2):
-
+			if !(header_map is Dictionary):
+				if(header_map==-2):
+					print("Invalid header")
+					return null
+				
 				if(header_map==-1):
 					return close_connection(431,"BYE" , connection, thread)
 				
-				#ISSUE:Can't find body end if no Content-Length given, only on keep connection open?
-				#chunked thransfer...
-				var body = _parse_body(header_map, connection)
-				#print(body)
-				#if(body==-1):
-				#	return close_connection(406,"Not Acceptable" , connection, thread)
-				
-				var output = {}
-				output["header"] = header_map
-				output["body"] = body
-				
-				handle_request(output, connection)
-				
-				if(output["header"].has("connection")):
-					if(output["header"]["connection"]=="keep-alive"):
-						#print("keep connection open")
-						keep_alive = true
-					else:
-						return close_connection(431,"BYE" , connection, thread)
-				#else:
-				#	return close_connection(431,"BYE" , connection, thread_id)
-			else:
-				print("Invalid header")
+			# ISSUE:Can't find body end if no Content-Length given, only on keep connection open?
+			#chunked thransfer...
+			var body = _parse_body(header_map, connection)
+			#print(body)
+			#if(body==-1):
+			#	return close_connection(406,"Not Acceptable" , connection, thread)
+			
+			var output = {}
+			output["header"] = header_map
+			output["body"] = body
+			
+			handle_request(output, connection)
+			
+			if(output["header"].has("connection")):
+				if(output["header"]["connection"]=="keep-alive"):
+					#print("keep connection open")
+					keep_alive = true
+				else:
+					return close_connection(431,"BYE" , connection, thread)
+			#else:
+			#	return close_connection(431,"BYE" , connection, thread_id)
+
 func end(thread, connection):
 	emit_signal("onDisconnect", connection, connection.get_connected_host())
 	call_deferred( "close_thread", thread.get_id() )

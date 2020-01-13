@@ -393,16 +393,16 @@ func get_File(header_map, body_map, params, connection):
 		path = "/index.html"
 	if(f.open(PUBLIC_PATH+path, File.READ)==0):
 		var rs = ""
-		if(path.extension()=="png" || path.extension()=="svg"):
+		if(path.get_extension()=="png" || path.get_extension()=="svg"):
 			rs = f.get_buffer(f.get_len())
 			response["header"]["content-type"] = "image/svg+xml"
 			
 			response["body"] = rs
-		elif(path.extension()=="css"):
+		elif(path.get_extension()=="css"):
 			rs = f.get_buffer(f.get_len())
 			response["header"]["content-type"] = "text/css; charset=utf-8"
 			response["body"] = rs
-		elif(path.extension()=="html"):
+		elif(path.get_extension()=="html"):
 			rs = f.get_as_text()
 			response["header"]["content-type"] = "text/html; charset=utf-8"
 			response["body"] = rs

@@ -104,7 +104,7 @@ func run_bg_request(verbindung):
 				
 				if(connection == null || !connection.is_connected_to_host()):
 					return end(thread, connection)
-				#Waiting until data incoming
+				# Waiting until data incoming
 				header += connection.get_data(1)[1].get_string_from_utf8()
 				header_size += 1
 				#print(str(header_size))
@@ -119,8 +119,8 @@ func run_bg_request(verbindung):
 			#	return close_connection(431,"BYE" , connection, thread)
 			#print(header_map)
 			
-			#ISSUE:Can't find body end if no Content-Length given
-			#chunked thransfer...
+			# ISSUE:Can't find body end if no Content-Length given
+			# chunked thransfer...
 			print(header_map)
 			var body = _parse_body(header_map, connection)
 			
