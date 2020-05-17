@@ -89,8 +89,8 @@ Each function delivers the following variables
   ```url: POST http://localhost:3560/register?user=test&password=123```
 
 ```gdscript
-	func post_register(header_dict, body, params_dict, connection):
-		print(params) #output { "user":"test","password":123 }
+func post_register(header_dict, body, params_dict, connection):
+	print(params) #output { "user":"test","password":123 }
 ```
 
 
@@ -99,8 +99,8 @@ Each function delivers the following variables
     ```url: GET http://localhost:3560/user/test?planet=moon```
 
 ```gdscript
-	func get_user_Name(header_dict, body, params_dict, connection):
-		print(params) #output {"name":"test","planet":moon}
+func get_user_Name(header_dict, body, params_dict, connection):
+	print(params) #output {"name":"test","planet":moon}
 ```
 
 #BUGS
