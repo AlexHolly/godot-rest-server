@@ -45,7 +45,9 @@ Method example in Some1Service.
 
 To use variables in the url you need to make the first character uppercase "Id".
 
-      func get_test_Id(header_dict, body, params_dict, connection):
+```gdscript
+func get_test_Id(header_dict, body, params_dict, connection):
+```
 
 # Add service manually
 
@@ -54,9 +56,11 @@ We want to add this url ```GET /user/test```
 
 Create the function that will be executed on ```GET /user/test``` requests and add this function to the service list
 
-    func get_user_User(header_dict, body, params_dict, connection):
-    func _ready():
-      add_service("GET", "user/User", [self,"get_user_User"])```
+```gdscript
+func get_user_User(header_dict, body, params_dict, connection):
+func _ready():
+	add_service("GET", "user/User", [self,"get_user_User"])
+```
 
 # Header keys IN/OUT upper or lower case?
   To leave header keys as they come set
@@ -84,18 +88,20 @@ Each function delivers the following variables
 
   ```url: POST http://localhost:3560/register?user=test&password=123```
 
-        func post_register(header_dict, body, params_dict, connection):
-
-          print(params) #output { "user":"test","password":123 }
+```gdscript
+func post_register(header_dict, body, params_dict, connection):
+	print(params) #output { "user":"test","password":123 }
+```
 
 
  - URL parameters need to start with an upper_case ("Name") in the function name.
 
     ```url: GET http://localhost:3560/user/test?planet=moon```
 
-        func get_user_Name(header_dict, body, params_dict, connection):
-
-          print(params) #output {"name":"test","planet":moon}
+```gdscript
+func get_user_Name(header_dict, body, params_dict, connection):
+	print(params) #output {"name":"test","planet":moon}
+```
 
 #BUGS
 
