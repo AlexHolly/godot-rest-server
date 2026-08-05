@@ -83,7 +83,7 @@ Cada función entrega las siguientes variables
 
  * header_dict = Diccionario que contiene todos los encabezados de la solicitud
  * body = el objeto json como diccionario si se agrega como tipo compatible.
- * header_dict = Contiene todos los parámetros de la URL (ruta (/Name) y consulta (?Name=) )
+ * params_dict = Contiene todos los parámetros de la URL (ruta (/Name) y consulta (?Name=) )
  * connection = Debería ser ignorada. Contiene el StreamPeerTCP
 
 ### ¿Cómo agregar tipos compatibles?
