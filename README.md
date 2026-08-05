@@ -43,7 +43,7 @@ https://github.com/AlexHolly/godot-http
  - Some2Service
 
 
-The REST Node will add all methods from his children that have "Service" at the end of there name.
+The REST Node will add all methods from his children that have "Service" at the end of their name.
 
 Method example in Some1Service.
 
@@ -81,7 +81,7 @@ Each function delivers the following variables
 
  * header_dict = Dictionary that contains all headers from the request
  * body = the json object as dictionary if added as supported type.
- * header_dict = Contains all params from the url(path (/Name) and query (?Name=) )
+ * params_dict = Contains all params from the url(path (/Name) and query (?Name=) )
  * connection = Should be ignored. It contains the StreamPeerTCP
 
 ### How to add supported types?
@@ -119,7 +119,7 @@ func get_user_Name(header_dict, body, params_dict, connection):
 
  - chunked-transfer
 
- - security(https,...)
+ - security (https,...)
 
  - send files/images -> bytestream?
 
